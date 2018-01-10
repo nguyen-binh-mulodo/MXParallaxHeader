@@ -29,6 +29,7 @@
 
 @implementation MXParallaxView
 
+NSInteger STATUS_BAR_HIEGHT = 20;
 static void * const kMXParallaxHeaderKVOContext = (void*)&kMXParallaxHeaderKVOContext;
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {
@@ -90,7 +91,7 @@ static void * const kMXParallaxHeaderKVOContext = (void*)&kMXParallaxHeaderKVOCo
         //Adjust content inset
         [self adjustScrollViewTopInset:self.scrollView.contentInset.top - _height + height];
         
-        _height = height;
+        _height = height + STATUS_BAR_HIEGHT;
         [self updateConstraints];
         [self layoutContentView];
     }
@@ -219,7 +220,7 @@ static void * const kMXParallaxHeaderKVOContext = (void*)&kMXParallaxHeaderKVOCo
     
     CGRect frame = (CGRect){
         .origin.x       = 0,
-        .origin.y       = relativeYOffset,
+        .origin.y       = relativeHeight > minimumHeight || self.scrollUpWhenSizeMinimized == false ? relativeYOffset : -minimumHeight,
         .size.width     = self.scrollView.frame.size.width,
         .size.height    = MAX(relativeHeight, minimumHeight)
     };
